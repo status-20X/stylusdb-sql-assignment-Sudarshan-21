@@ -57,6 +57,7 @@ function parseQuery(query) {
     fields: fields.split(",").map((field) => field.trim()),
     table: table.trim(),
     whereClauses,
+    joinType,
     joinTable,
     joinCondition,
   };

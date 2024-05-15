@@ -17,6 +17,7 @@ test("Parse SQL Query", () => {
     fields: ["id", "name"],
     table: "student",
     whereClauses: [],
+    joinType: null,
     joinCondition: null,
     joinTable: null,
   });
@@ -45,6 +46,7 @@ test("Parse SQL Query with WHERE Clause", () => {
         value: "25",
       },
     ],
+    joinType: null,
     joinCondition: null,
     joinTable: null,
   });
@@ -77,6 +79,7 @@ test("Parse SQL Query with Multiple WHERE Clauses", () => {
         value: "John",
       },
     ],
+    joinType: null,
     joinCondition: null,
     joinTable: null,
   });
@@ -111,6 +114,7 @@ test("Parse SQL Query with INNER JOIN", async () => {
     fields: ["student.name", "enrollment.course"],
     table: "student",
     whereClauses: [],
+    joinType: null,
     joinTable: "enrollment",
     joinCondition: { left: "student.id", right: "enrollment.student_id" },
   });
@@ -124,6 +128,7 @@ test("Parse SQL Query with INNER JOIN and WHERE Clause", async () => {
     fields: ["student.name", "enrollment.course"],
     table: "student",
     whereClauses: [{ field: "student.age", operator: ">", value: "20" }],
+    joinType: null,
     joinTable: "enrollment",
     joinCondition: { left: "student.id", right: "enrollment.student_id" },
   });

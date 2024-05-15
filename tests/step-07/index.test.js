@@ -17,6 +17,7 @@ test("Parse SQL Query", () => {
     fields: ["id", "name"],
     table: "student",
     whereClauses: [],
+    joinType: null,
     joinCondition: null,
     joinTable: null,
   });
@@ -45,6 +46,7 @@ test("Parse SQL Query with WHERE Clause", () => {
         value: "25",
       },
     ],
+    joinType: null,
     joinCondition: null,
     joinTable: null,
   });
@@ -77,6 +79,7 @@ test("Parse SQL Query with Multiple WHERE Clauses", () => {
         value: "John",
       },
     ],
+    joinType: null,
     joinCondition: null,
     joinTable: null,
   });
