@@ -1,5 +1,6 @@
 // src/index.js
 
+const fs = require("fs");
 const parseQuery = require("./queryParser");
 const readCSV = require("./csvReader");
 
