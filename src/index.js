@@ -129,7 +129,7 @@ async function executeSELECTQuery(query) {
     throw new Error("Only SELECT queries are supported");
   }
 
-  const { fields, table, whereClauses, joinTable, joinCondition } =
+  const { fields, table, whereClauses, joinType, joinTable, joinCondition } =
     parseQuery(query);
   const filePath = `${table}.csv`;
 
