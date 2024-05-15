@@ -38,7 +38,7 @@ async function executeSELECTQuery(query) {
   }
 
   console.log(`Reading data from file: ${filePath}`);
-  const data = await readCSV(filePath);
+  let data = await readCSV(filePath);
 
   // Perform INNER JOIN if specified
   if (joinTable && joinCondition) {
