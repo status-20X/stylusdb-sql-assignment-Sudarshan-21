@@ -77,6 +77,8 @@ test("Parse SQL Query with Multiple WHERE Clauses", () => {
         value: "John",
       },
     ],
+    joinCondition: null,
+    joinTable: null,
   });
 });
 
