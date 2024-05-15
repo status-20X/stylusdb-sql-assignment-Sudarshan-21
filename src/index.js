@@ -18,15 +18,18 @@ async function executeSELECTQuery(query) {
 
   const data = await readCSV(filePath);
 
-  // Filtering based on WHERE clause
-  const filteredData = whereClause
-    ? data.filter((row) => {
-        const [field, value] = whereClause.split("=").map((s) => s.trim());
-        return row[field] === value;
-      })
-    : data;
+  // Apply WHERE clause filtering
+  const filteredData =
+    whereClauses.length > 0
+      ? data.filter((row) =>
+          whereClauses.every((clause) => {
+            // You can expand this to handle different operators
+            return row[clause.field] === clause.value;
+          })
+        )
+      : data;
 
-  // Selecting the specified fields
+  // Select the specified fields
   return filteredData.map((row) => {
     const selectedRow = {};
     fields.forEach((field) => {
