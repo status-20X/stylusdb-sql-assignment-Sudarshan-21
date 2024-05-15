@@ -18,13 +18,21 @@ async function executeSELECTQuery(query) {
 
   const data = await readCSV(filePath);
 
-  // Filter the fields based on the query
-  return data.map((row) => {
-    const filteredRow = {};
+  // Filtering based on WHERE clause
+  const filteredData = whereClause
+    ? data.filter((row) => {
+        const [field, value] = whereClause.split("=").map((s) => s.trim());
+        return row[field] === value;
+      })
+    : data;
+
+  // Selecting the specified fields
+  return filteredData.map((row) => {
+    const selectedRow = {};
     fields.forEach((field) => {
-      filteredRow[field] = row[field];
+      selectedRow[field] = row[field];
     });
-    return filteredRow;
+    return selectedRow;
   });
 }
 
