@@ -37,11 +37,19 @@ async function executeSELECTQuery(query) {
     throw new Error(`CSV file '${filePath}' not found`);
   }
 
+  console.log(`Reading data from file: ${filePath}`);
   const data = await readCSV(filePath);
 
   // Perform INNER JOIN if specified
   if (joinTable && joinCondition) {
-    const joinData = await readCSV(`${joinTable}.csv`);
+    const joinFilePath = `${joinTable}.csv`;
+    if (!fs.existsSync(joinFilePath)) {
+      throw new Error(`CSV file '${joinFilePath}' not found`);
+    }
+
+    console.log(`Reading join data from file: ${joinFilePath}`);
+    const joinData = await readCSV(joinFilePath);
+
     data = data.flatMap((mainRow) => {
       return joinData
         .filter((joinRow) => {
@@ -59,6 +67,7 @@ async function executeSELECTQuery(query) {
         });
     });
   }
+
   // Apply WHERE clause filtering
   const filteredData =
     whereClauses.length > 0
@@ -68,7 +77,7 @@ async function executeSELECTQuery(query) {
       : data;
 
   // Select the specified fields
-  filteredData.map((row) => {
+  const result = filteredData.map((row) => {
     const selectedRow = {};
     fields.forEach((field) => {
       // Assuming 'field' is just the column name without table prefix
@@ -76,6 +85,9 @@ async function executeSELECTQuery(query) {
     });
     return selectedRow;
   });
+
+  console.log(`Query executed successfully. Result:`, result);
+  return result;
 }
 
 module.exports = executeSELECTQuery;
