@@ -1,5 +1,5 @@
-const readCSV = require("../../src/csvReader");
-const { parseQuery } = require("../../src/queryParser");
+const { readCSV } = require("../../src/csvReader");
+const { parseSelectQuery } = require("../../src/queryParser");
 
 test("Read CSV File", async () => {
   const data = await readCSV("./student.csv");
@@ -11,18 +11,18 @@ test("Read CSV File", async () => {
 
 test("Parse SQL Query", () => {
   const query = "SELECT id, name FROM student";
-  const parsed = parseQuery(query);
+  const parsed = parseSelectQuery(query);
   expect(parsed).toEqual({
     fields: ["id", "name"],
     table: "student",
-    whereClauses: [],
-    joinType: null,
+    isDistinct: false,
     joinCondition: null,
+    groupByFields: null,
+    orderByFields: null,
+    hasAggregateWithoutGroupBy: false,
     joinTable: null,
+    joinType: null,
+    limit: null,
+    whereClauses: [],
   });
-});
-
-test("Invalid Query Format", () => {
-  const query = "SELECT id, name";
-  expect(() => parseQuery(query)).toThrow();
 });

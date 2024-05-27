@@ -1,6 +1,6 @@
-const readCSV = require("../../src/csvReader");
-const { parseQuery } = require("../../src/queryParser");
-const executeSELECTQuery = require("../../src/index");
+const { readCSV } = require("../../src/csvReader");
+const { parseSelectQuery } = require("../../src/queryParser");
+const { executeSELECTQuery } = require("../../src/index");
 
 test("Read CSV File", async () => {
   const data = await readCSV("./student.csv");
@@ -12,14 +12,19 @@ test("Read CSV File", async () => {
 
 test("Parse SQL Query", () => {
   const query = "SELECT id, name FROM student";
-  const parsed = parseQuery(query);
+  const parsed = parseSelectQuery(query);
   expect(parsed).toEqual({
     fields: ["id", "name"],
     table: "student",
-    whereClauses: [],
-    joinType: null,
     joinCondition: null,
     joinTable: null,
+    isDistinct: false,
+    limit: null,
+    joinType: null,
+    groupByFields: null,
+    orderByFields: null,
+    hasAggregateWithoutGroupBy: false,
+    whereClauses: [],
   });
 });
 
@@ -34,29 +39,37 @@ test("Execute SQL Query", async () => {
 });
 
 test("Parse SQL Query with WHERE Clause", () => {
-  const query = "SELECT id, name FROM student WHERE age = 25";
-  const parsed = parseQuery(query);
+  const query = "SELECT id, name FROM student WHERE age = 30 AND name = John";
+  const parsed = parseSelectQuery(query);
   expect(parsed).toEqual({
     fields: ["id", "name"],
     table: "student",
+    joinCondition: null,
+    joinTable: null,
+    limit: null,
+    isDistinct: false,
+    joinType: null,
+    groupByFields: null,
+    orderByFields: null,
+    hasAggregateWithoutGroupBy: false,
     whereClauses: [
       {
         field: "age",
         operator: "=",
-        value: "25",
+        value: "30",
+      },
+      {
+        field: "name",
+        operator: "=",
+        value: "John",
       },
     ],
-    joinType: null,
-    joinCondition: null,
-    joinTable: null,
   });
 });
 
 test("Execute SQL Query with WHERE Clause", async () => {
-  const query = "SELECT id, name FROM student WHERE age = 25";
+  const query = "SELECT id, name FROM student WHERE age = 30 AND name = John";
   const result = await executeSELECTQuery(query);
   expect(result.length).toBe(1);
-  expect(result[0]).toHaveProperty("id");
-  expect(result[0]).toHaveProperty("name");
-  expect(result[0].id).toBe("2");
+  expect(result[0]).toEqual({ id: "1", name: "John" });
 });

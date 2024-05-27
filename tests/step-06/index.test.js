@@ -1,6 +1,6 @@
-const readCSV = require("../../src/csvReader");
-const { parseQuery } = require("../../src/queryParser");
-const executeSELECTQuery = require("../../src/index");
+const { readCSV } = require("../../src/csvReader");
+const { parseSelectQuery } = require("../../src/queryParser");
+const { executeSELECTQuery } = require("../../src/index");
 
 test("Read CSV File", async () => {
   const data = await readCSV("./student.csv");
@@ -12,14 +12,19 @@ test("Read CSV File", async () => {
 
 test("Parse SQL Query", () => {
   const query = "SELECT id, name FROM student";
-  const parsed = parseQuery(query);
+  const parsed = parseSelectQuery(query);
   expect(parsed).toEqual({
     fields: ["id", "name"],
     table: "student",
-    whereClauses: [],
-    joinType: null,
     joinCondition: null,
+    isDistinct: false,
     joinTable: null,
+    limit: null,
+    joinType: null,
+    groupByFields: null,
+    orderByFields: null,
+    hasAggregateWithoutGroupBy: false,
+    whereClauses: [],
   });
 });
 
@@ -35,10 +40,18 @@ test("Execute SQL Query", async () => {
 
 test("Parse SQL Query with WHERE Clause", () => {
   const query = "SELECT id, name FROM student WHERE age = 25";
-  const parsed = parseQuery(query);
+  const parsed = parseSelectQuery(query);
   expect(parsed).toEqual({
     fields: ["id", "name"],
     table: "student",
+    isDistinct: false,
+    joinCondition: null,
+    joinTable: null,
+    joinType: null,
+    limit: null,
+    groupByFields: null,
+    orderByFields: null,
+    hasAggregateWithoutGroupBy: false,
     whereClauses: [
       {
         field: "age",
@@ -46,9 +59,6 @@ test("Parse SQL Query with WHERE Clause", () => {
         value: "25",
       },
     ],
-    joinType: null,
-    joinCondition: null,
-    joinTable: null,
   });
 });
 
@@ -63,10 +73,18 @@ test("Execute SQL Query with WHERE Clause", async () => {
 
 test("Parse SQL Query with Multiple WHERE Clauses", () => {
   const query = "SELECT id, name FROM student WHERE age = 30 AND name = John";
-  const parsed = parseQuery(query);
+  const parsed = parseSelectQuery(query);
   expect(parsed).toEqual({
     fields: ["id", "name"],
     table: "student",
+    isDistinct: false,
+    joinCondition: null,
+    joinTable: null,
+    joinType: null,
+    limit: null,
+    groupByFields: null,
+    orderByFields: null,
+    hasAggregateWithoutGroupBy: false,
     whereClauses: [
       {
         field: "age",
@@ -79,9 +97,6 @@ test("Parse SQL Query with Multiple WHERE Clauses", () => {
         value: "John",
       },
     ],
-    joinType: null,
-    joinCondition: null,
-    joinTable: null,
   });
 });
 
