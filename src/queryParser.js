@@ -138,6 +138,5 @@ function parseDeleteQuery(query) {
 module.exports = {
   parseSelectQuery,
   parseJoinClause,
-  parseInsertQuery,
   parseDeleteQuery,
 };
